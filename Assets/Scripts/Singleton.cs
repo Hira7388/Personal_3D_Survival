@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,12 +9,12 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            // ÀÎ½ºÅÏ½º ¾øÀ» ¶§
+            // ì¸ìŠ¤í„´ìŠ¤ ì—†ì„ ë•Œ
             if(instance == null)
             {
-                // ÀÎ½ºÅÏ½º¸¦ Ã£¾Æº»´Ù. ÀÖÀ¸¸é ³Ö¾îÁØ´Ù.
+                // ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì°¾ì•„ë³¸ë‹¤. ìˆìœ¼ë©´ ë„£ì–´ì¤€ë‹¤.
                 instance = FindObjectOfType<T>(); 
-                // Ã£¾ÆºÁµµ ¾øÀ¸¸é »õ·Î »ı¼ºÇÑ´Ù.
+                // ì°¾ì•„ë´ë„ ì—†ìœ¼ë©´ ìƒˆë¡œ ìƒì„±í•œë‹¤.
                 if(instance == null) 
                 {
                     GameObject singletonObject = new(typeof(T).Name);
@@ -26,20 +26,20 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    // ÃÊ±âÈ­ ¸Ş¼­µå Awake¿¡¼­ ½ÇÇàÇÏ´Ï±î ¿©±â¼­ ÃÊ±âÈ­ÇØµµ µÈ´Ù.
+    // ì´ˆê¸°í™” ë©”ì„œë“œ Awakeì—ì„œ ì‹¤í–‰í•˜ë‹ˆê¹Œ ì—¬ê¸°ì„œ ì´ˆê¸°í™”í•´ë„ ëœë‹¤.
     protected virtual void Initialize() { }
 
     protected virtual void Awake()
     {
-        // ÇØ´ç ¸Å´ÏÀú°¡ ÀÖ°í, ±× ¸Å´ÏÀú°¡ ³»°¡ ¾Æ´Ï¸é(Áßº¹)
+        // í•´ë‹¹ ë§¤ë‹ˆì €ê°€ ìˆê³ , ê·¸ ë§¤ë‹ˆì €ê°€ ë‚´ê°€ ì•„ë‹ˆë©´(ì¤‘ë³µ)
         if(instance != null && instance != this)
         {
-            // ³ª¸¦ ÆÄ±«ÇØ¼­ Áßº¹ ¹æÁöÇÑ´Ù.
+            // ë‚˜ë¥¼ íŒŒê´´í•´ì„œ ì¤‘ë³µ ë°©ì§€í•œë‹¤.
             Destroy(gameObject);
         }
         else
         {
-            // ±×³É this´Â MonoBehaviourÀÌ´Ù. µû¶ó¼­ as T·Î SingletonÀ¸·Î Çü º¯È¯ ÇÑ´Ù.
+            // ê·¸ëƒ¥ thisëŠ” MonoBehaviourì´ë‹¤. ë”°ë¼ì„œ as Të¡œ Singletonìœ¼ë¡œ í˜• ë³€í™˜ í•œë‹¤.
             instance = this as T;
             Initialize();
             DontDestroyOnLoad(gameObject);

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,18 +7,18 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float moveSpeed; // ¿òÁ÷ÀÓ ¼Óµµ
-    [SerializeField] private float jumpPower; // Á¡ÇÁ ÆÄ¿ö
+    [SerializeField] private float moveSpeed; // ì›€ì§ì„ ì†ë„
+    [SerializeField] private float jumpPower; // ì í”„ íŒŒì›Œ
     private Vector3 curMovement;
 
     [Header("Look")]
-    [SerializeField] private float minXLook; // Ä«¸Ş¶ó ÃÖ¼Ò °¢µµ
-    [SerializeField] private float maxXLook; // Ä«¸Ş¶ó ÃÖ´ë °¢µµ
-    [SerializeField] private float lookSensitivity; // ¸¶¿ì½º ¹Î°¨µµ
-    [SerializeField] private Transform cameraContainer; // Ä«¸Ş¶ó È¸ÀüÀ» À§ÇÑ ÄÁÅ×ÀÌ³Ê °¡Á®¿À±â
-    private float curCamXRot; // ÇöÀç Ä«¸Ş¶óÀÇ »óÇÏ È¸ÀüÀ» À§ÇÑ º¯¼ö
+    [SerializeField] private float minXLook; // ì¹´ë©”ë¼ ìµœì†Œ ê°ë„
+    [SerializeField] private float maxXLook; // ì¹´ë©”ë¼ ìµœëŒ€ ê°ë„
+    [SerializeField] private float lookSensitivity; // ë§ˆìš°ìŠ¤ ë¯¼ê°ë„
+    [SerializeField] private Transform cameraContainer; // ì¹´ë©”ë¼ íšŒì „ì„ ìœ„í•œ ì»¨í…Œì´ë„ˆ ê°€ì ¸ì˜¤ê¸°
+    private float curCamXRot; // í˜„ì¬ ì¹´ë©”ë¼ì˜ ìƒí•˜ íšŒì „ì„ ìœ„í•œ ë³€ìˆ˜
     private float curPlayerYRot;
-    private Vector2 mouseDelta; // ¸¶¿ì½ºÀÇ È¸Àü Á¤º¸
+    private Vector2 mouseDelta; // ë§ˆìš°ìŠ¤ì˜ íšŒì „ ì •ë³´
 
     private Rigidbody _rigidbody;
 
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
-        // ¸¶¿ì½º Ä¿¼­ ¼û±â±â
+        // ë§ˆìš°ìŠ¤ ì»¤ì„œ ìˆ¨ê¸°ê¸°
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    // ¹°¸® °è»êÀÌ Updateº¸´Ù ´õ ÀÚÁÖ °è»êµÈ´Ù.
+    // ë¬¼ë¦¬ ê³„ì‚°ì´ Updateë³´ë‹¤ ë” ìì£¼ ê³„ì‚°ëœë‹¤.
     private void FixedUpdate()
     {
         Move();
@@ -50,52 +50,52 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        // ¹æÇâ ±¸ÇÏ±â
+        // ë°©í–¥ êµ¬í•˜ê¸°
         Vector3 dir = transform.forward * curMovement.y + transform.right * curMovement.x;
 
-        // ¼Óµµ °öÇÏ±â
+        // ì†ë„ ê³±í•˜ê¸°
         dir = dir * moveSpeed;
 
-        // yÃà °íÁ¤ÇÏ±â
+        // yì¶• ê³ ì •í•˜ê¸°
         dir.y = _rigidbody.velocity.y;
 
-        // ÇÃ·¹ÀÌ¾î ÀÌµ¿ÇÏ±â
+        // í”Œë ˆì´ì–´ ì´ë™í•˜ê¸°
         _rigidbody.velocity = dir;
     }
     public void OnMove(InputAction.CallbackContext context)
     {
-        // ÇöÀç ¹Ş¾Æ¿Â context°¡ ´­·ÁÁ® ÀÖ´Â »óÈ²ÀÌ¶ó¸é
+        // í˜„ì¬ ë°›ì•„ì˜¨ contextê°€ ëˆŒë ¤ì ¸ ìˆëŠ” ìƒí™©ì´ë¼ë©´
         if(context.phase == InputActionPhase.Performed)
         {
-            // Vector2 value¸¦ ¹Ş¾Æ¿Â´Ù.
+            // Vector2 valueë¥¼ ë°›ì•„ì˜¨ë‹¤.
             curMovement = context.ReadValue<Vector2>();
         }
-        // context°¡ ¶¼Á® ÀÖ´Â »óÈ²
+        // contextê°€ ë–¼ì ¸ ìˆëŠ” ìƒí™©
         else if(context.phase == InputActionPhase.Canceled)
         {
-            // ¿òÁ÷ÀÓÀ» ¸ØÃá´Ù.
+            // ì›€ì§ì„ì„ ë©ˆì¶˜ë‹¤.
             curMovement = Vector2.zero;
         }
     }
 
     private void Look()
     {
-        // ÇöÀç Ä«¸Ş¶óÀÇ È¸Àü¿¡ ¸¶¿ì½º ¹Î°¨µµ¿¡ ¸ÂÃç¼­ È¸Àü°ªÀ» ´õ °öÇØÁØ´Ù.
+        // í˜„ì¬ ì¹´ë©”ë¼ì˜ íšŒì „ì— ë§ˆìš°ìŠ¤ ë¯¼ê°ë„ì— ë§ì¶°ì„œ íšŒì „ê°’ì„ ë” ê³±í•´ì¤€ë‹¤.
         curCamXRot += mouseDelta.y * lookSensitivity;
-        // »óÇÏ È¸ÀüÀÇ Á¦ÇÑ °ªÀ» ¼³Á¤ÇÑ´Ù.
+        // ìƒí•˜ íšŒì „ì˜ ì œí•œ ê°’ì„ ì„¤ì •í•œë‹¤.
         curCamXRot = Mathf.Clamp(curCamXRot, minXLook, maxXLook);
-        // ½ÇÁ¦ Ä«¸Ş¶ó¸¦ È¸ÀüÇÑ´Ù.
+        // ì‹¤ì œ ì¹´ë©”ë¼ë¥¼ íšŒì „í•œë‹¤.
         cameraContainer.localEulerAngles = new Vector3(-curCamXRot, 0, 0);
 
-
+        // í”Œë ˆì´ì–´ì˜ íšŒì „ì„ ë¯¼ê°ë„ì— ë§ì¶°ì„œ íšŒì „ê°’ì„ ë” ê³±í•œë‹¤.
         curPlayerYRot += mouseDelta.x * lookSensitivity;
-        // ÁÂ¿ì´Â Ä³¸¯ÅÍÀÇ ½ºÇÁ¶óÀÌÆ®µµ °°ÀÌ ¿òÁ÷¿©¾ß ÇÏ±â ¶§¹®¿¡ localÀ» »ç¿ëÇÏÁö ¾ÊÀ½
+        // ì¢Œìš°ëŠ” ìºë¦­í„°ì˜ ìŠ¤í”„ë¼ì´íŠ¸ë„ ê°™ì´ ì›€ì§ì—¬ì•¼ í•˜ê¸° ë•Œë¬¸ì— localì„ ì‚¬ìš©í•˜ì§€ ì•ŠìŒ
         transform.eulerAngles = new Vector3(0, curPlayerYRot, 0);
     }
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        // ¹Ù¶óº¸·Á°í ¿òÁ÷ÀÎ º¤ÅÍ °ª
+        // ë°”ë¼ë³´ë ¤ê³  ì›€ì§ì¸ ë²¡í„° ê°’
         mouseDelta = context.ReadValue<Vector2>();
     }
 
