@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private float curCamXRot; // 현재 카메라의 상하 회전을 위한 변수
     private float curPlayerYRot;
     private Vector2 mouseDelta; // 마우스의 회전 정보
+    public bool canLook = true;
 
     private Rigidbody _rigidbody;
 
@@ -45,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        Look();
+        if(canLook) Look(); 
     }
 
     private void Move()
@@ -102,5 +103,22 @@ public class PlayerController : MonoBehaviour
     public void OnJump()
     {
 
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        // 키가 눌렸을 때 '한 번만' 호출되도록 Performed 단계에서 확인합니다.
+        if (context.phase == InputActionPhase.Performed)
+        {
+            // UIManager를 통해 InventoryUI의 Toggle 함수를 호출합니다.
+            UIManager.Instance.inventoryUI.Toggle();
+        }
+    }
+
+    void ToggleCursor()
+    {
+        bool toggle = Cursor.lockState == CursorLockMode.Locked;
+        Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
+        canLook = !toggle;
     }
 }
