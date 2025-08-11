@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     public Inventory inventory; // 플레이어의 Inventory 컴포넌트를 연결
+    private PlayerController playerController;
 
     [Header("UI Elements")]
     public GameObject inventoryWindow;
@@ -23,6 +24,10 @@ public class InventoryUI : MonoBehaviour
     public Button unequipButton;
     public Button dropButton;
 
+    private void Awake()
+    {
+        playerController = inventory.GetComponent<PlayerController>();
+    }
     private void Start()
     {
         // 1. 슬롯을 먼저 '생성'하고 'slots' 배열에 채웁니다.
@@ -141,11 +146,13 @@ public class InventoryUI : MonoBehaviour
         {
             // 커서를 보이고 잠금을 해제
             Cursor.lockState = CursorLockMode.None;
+            playerController.SetCanLook(false);
         }
         else // 창이 꺼졌다면 (isActive == false)
         {
             // 커서를 숨기고 화면 중앙에 잠금
             Cursor.lockState = CursorLockMode.Locked;
+            playerController.SetCanLook(true);
         }
     }
 

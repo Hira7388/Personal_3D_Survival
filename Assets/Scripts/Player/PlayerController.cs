@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(canLook) Look(); 
+        if (canLook) { Look(); }
     }
 
     private void Move()
@@ -149,5 +149,10 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }
+
+    public void SetCanLook(bool value)
+    {
+        canLook = value;
     }
 }
