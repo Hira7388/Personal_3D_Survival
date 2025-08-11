@@ -25,15 +25,15 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
+        // 1. 슬롯을 먼저 '생성'하고 'slots' 배열에 채웁니다.
         GenerateSlots();
+
+        // 2. 그 다음에 Inventory의 이벤트를 '구독'합니다.
         inventory.OnInventoryChanged += UpdateUI;
-        slots = slotPanel.GetComponentsInChildren<ItemSlotUI>();
-        for (int i = 0; i < slots.Length; i++)
-        {
-            slots[i].index = i;
-            slots[i].inventoryUI = this;
-        }
+
+        // 3. 마지막으로 창을 닫고 UI를 초기 상태로 한번 그려줍니다.
         inventoryWindow.SetActive(false);
+        UpdateUI();
     }
 
     void OnDestroy()
@@ -130,6 +130,24 @@ public class InventoryUI : MonoBehaviour
         unequipButton.gameObject.SetActive(false);
         dropButton.gameObject.SetActive(false);
     }
+    public void Toggle()
+    {
+        //창의 활성 상태를 반대로 변경한다.
+        bool isActive = !inventoryWindow.activeSelf;
+        inventoryWindow.SetActive(isActive);
+
+        // 창이 켜졌다면 (isActive == true)
+        if (isActive)
+        {
+            // 커서를 보이고 잠금을 해제
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else // 창이 꺼졌다면 (isActive == false)
+        {
+            // 커서를 숨기고 화면 중앙에 잠금
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
 
     // 슬롯을 클릭했을 때
     public void OnSlotClicked(int index) => inventory.SelectItem(index);
@@ -142,5 +160,4 @@ public class InventoryUI : MonoBehaviour
     // 버리기 버튼을 눌렀을 때
     public void OnDropButton() => inventory.DropSelectedItem();
     // 인벤토리 껏다 켜기
-    public void Toggle() => inventoryWindow.SetActive(!inventoryWindow.activeSelf);
 }

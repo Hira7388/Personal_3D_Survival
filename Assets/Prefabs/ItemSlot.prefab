@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7426373295100082134}
   - component: {fileID: 7122514588452907072}
   - component: {fileID: 714467010286813337}
+  - component: {fileID: 5704850075839046931}
   m_Layer: 0
   m_Name: ItemSlot
   m_TagString: Untagged
@@ -152,6 +153,21 @@ MonoBehaviour:
   quantityText: {fileID: 3705029081287528932}
   index: 0
   inventoryUI: {fileID: 0}
+--- !u!114 &5704850075839046931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5022540597314669466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &6486017753848079942
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,7 +233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC1C\uC218\n"
+  m_text: 12
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ff7db13d06cbbd443bd70bf37b65bb59, type: 2}
   m_sharedMaterial: {fileID: 8481562434763851948, guid: ff7db13d06cbbd443bd70bf37b65bb59, type: 2}
@@ -226,8 +242,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4280046002
+  m_fontColor: {r: 0.6981132, g: 0.31600413, b: 0.10866857, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -244,8 +260,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
