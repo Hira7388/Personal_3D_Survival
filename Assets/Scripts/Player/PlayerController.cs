@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed; // 움직임 속도
     [SerializeField] private float jumpPower; // 점프 파워
     [SerializeField] private float airControlForce = 10f; // 공중에서 움직임
+    [SerializeField] private float stickToGroundForce = 5f; // 땅에 붙어 있으려는 힘(조그마한 오브젝트를 지날 때도 InAir상태가 되는 것을 줄여준다)
     private Vector3 curMovement;
     public LayerMask groundLayerMask;
 
@@ -65,6 +66,8 @@ public class PlayerController : MonoBehaviour
         dir *= moveSpeed;
         dir.y = _rigidbody.velocity.y; // Y축 속도는 보존
         _rigidbody.velocity = dir;
+
+        _rigidbody.AddForce(Vector3.down * stickToGroundForce, ForceMode.Force);
     }
 
     private void MoveInAir()
