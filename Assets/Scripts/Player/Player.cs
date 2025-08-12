@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private PlayerController controller;
-    public  PlayerCondition condition { get; set; }
+    public PlayerController controller { get; private set; }
+    public PlayerCondition condition { get; private set; }
     public Inventory inventory { get; set; }
     private void Awake()
     {

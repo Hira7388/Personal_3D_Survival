@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,9 @@ public class PlayerController : MonoBehaviour
     private float curPlayerYRot;
     private Vector2 mouseDelta; // 마우스의 회전 정보
     public bool canLook = true;
+
+    public event Action OnJumpEvent;
+
 
     private Rigidbody _rigidbody;
 
@@ -120,6 +124,7 @@ public class PlayerController : MonoBehaviour
         if ((context.phase == InputActionPhase.Started) && IsGrounded())
         {
             _rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
+            OnJumpEvent?.Invoke();
         }
     }
 

@@ -11,3 +11,4 @@ public class CharacterManager : Singleton<CharacterManager>
         set => _player = value;
     }
 }
+ 
