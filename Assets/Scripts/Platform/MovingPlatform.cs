@@ -1,13 +1,5 @@
 using UnityEngine;
 
-enum MoveDirection
-{
-    Forward,
-    Backward,
-    Right,
-    Left
-}
-
 enum MovingType
 {
     Go,
