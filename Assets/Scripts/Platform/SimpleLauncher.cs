@@ -45,7 +45,6 @@ public class SimpleLauncher : MonoBehaviour
     {
         if (targetRigidbody == null) return;
 
-        // 코루틴 없이, 그냥 바로 힘을 가합니다.
         targetRigidbody.AddForce(launchDirection.normalized * launchPower, ForceMode.Impulse);
     }
 
