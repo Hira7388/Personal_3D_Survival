@@ -13,11 +13,13 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] private float movingDistance;
 
     private Vector3 startPos;
+    private Vector3 endPos;
     private Transform curPos;
     private MovingType movingType;
     private void Start()
     {
         startPos = transform.position;
+        endPos = startPos + new Vector3(movingDistance, 0, 0);
         curPos = transform;
         movingType = MovingType.Go;
     }
@@ -31,9 +33,10 @@ public class MovingPlatform : MonoBehaviour
     {
         if (movingType == MovingType.Go)
         {
-            curPos.position = new Vector3(curPos.position.x + movingSpeed * Time.deltaTime, curPos.position.y, curPos.position.z);
+            //curPos.position = new Vector3(curPos.position.x + movingSpeed * Time.deltaTime, curPos.position.y, curPos.position.z);
+            curPos.position = Vector3.MoveTowards(curPos.position, endPos, movingSpeed * Time.deltaTime);
 
-            if (curPos.position.x - startPos.x >= movingDistance)
+            if (curPos.position == endPos)
             {
                 movingType = MovingType.Back;
             }
@@ -41,8 +44,9 @@ public class MovingPlatform : MonoBehaviour
         else
         {
             // 반대로 되돌아 가는 로직
-            curPos.position = new Vector3(curPos.position.x - movingSpeed * Time.deltaTime, curPos.position.y, curPos.position.z);
-            if (curPos.position.x < startPos.x)
+            //curPos.position = new Vector3(curPos.position.x - movingSpeed * Time.deltaTime, curPos.position.y, curPos.position.z);
+            curPos.position = Vector3.MoveTowards(curPos.position, startPos, movingSpeed * Time.deltaTime);
+            if (curPos.position == startPos)
             {
                 movingType = MovingType.Go;
             }
