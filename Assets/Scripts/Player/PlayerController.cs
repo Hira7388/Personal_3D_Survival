@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed; // 움직임 속도
     [SerializeField] private float jumpPower; // 점프 파워
+    [SerializeField] private float airControlForce = 10f; // 공중에서 움직임
     private Vector3 curMovement;
     public LayerMask groundLayerMask;
 
@@ -43,7 +44,14 @@ public class PlayerController : MonoBehaviour
     // 물리 계산이 Update보다 더 자주 계산된다.
     private void FixedUpdate()
     {
-        Move();
+        if (IsGrounded())
+        {
+            MoveOnGround();
+        }
+        else
+        {
+            MoveInAir();
+        }
     }
 
     private void LateUpdate()
@@ -51,20 +59,22 @@ public class PlayerController : MonoBehaviour
         if (canLook) { Look(); }
     }
 
-    private void Move()
+    private void MoveOnGround()
     {
-        // 방향 구하기
         Vector3 dir = transform.forward * curMovement.y + transform.right * curMovement.x;
-
-        // 속도 곱하기
-        dir = dir * moveSpeed;
-
-        // y축 고정하기
-        dir.y = _rigidbody.velocity.y;
-
-        // 플레이어 이동하기
+        dir *= moveSpeed;
+        dir.y = _rigidbody.velocity.y; // Y축 속도는 보존
         _rigidbody.velocity = dir;
     }
+
+    private void MoveInAir()
+    {
+        // AddForce를 사용해서 공중에서 약간의 힘만 가합니다.
+        // 이렇게 하면 발사체에서 받은 큰 속력을 덮어쓰지 않고 더해줍니다.
+        Vector3 dir = transform.forward * curMovement.y + transform.right * curMovement.x;
+        _rigidbody.AddForce(dir * airControlForce, ForceMode.Force);
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         // 현재 받아온 context가 눌려져 있는 상황이라면
