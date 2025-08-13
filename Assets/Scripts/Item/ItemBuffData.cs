@@ -17,3 +17,16 @@ public class BuffData
     public float value;     // 버프 수치
     public float duration;  // 버프 지속시간
 }
+
+// 활성화된 버프
+public class ActiveBuff
+{
+    public BuffData Data { get; private set; }
+    public float RemainingTime { get; set; }
+
+    public ActiveBuff(BuffData data)
+    {
+        Data = data;
+        RemainingTime = data.duration;
+    }
+}
