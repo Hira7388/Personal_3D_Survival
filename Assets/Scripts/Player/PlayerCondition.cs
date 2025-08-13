@@ -18,6 +18,7 @@ public class PlayerCondition : MonoBehaviour, IDamagalbe
 
     [Header("Settings")]
     public float noHungerHealthDecay;
+    public float jumpStaminaCost = 10f;
     public event Action OnTakeDamage; // 데미지를 받았을 때 발생할 이벤트를 담을 변수
 
     private PlayerController controller;
@@ -29,7 +30,7 @@ public class PlayerCondition : MonoBehaviour, IDamagalbe
 
     private void OnEnable()
     {
-        controller.OnJumpEvent += DecreaseStaminaOnJump;
+        if (controller != null) controller.OnJumpEvent += DecreaseStaminaOnJump;
     }
 
     void Update()
@@ -75,11 +76,13 @@ public class PlayerCondition : MonoBehaviour, IDamagalbe
         return true;
     }
 
+    // 점프하면 불러올 이벤트
     public void DecreaseStaminaOnJump()
     {
-
+        UseStamina(jumpStaminaCost);
     }
 
+    // 사용하지 않을 때 메모리에서 해제
     private void OnDisable()
     {
         if (controller != null)
