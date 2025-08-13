@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float stickToGroundForce = 5f; // 땅에 붙어 있으려는 힘(조그마한 오브젝트를 지날 때도 InAir상태가 되는 것을 줄여준다)
     private Vector3 curMovement;
     public LayerMask groundLayerMask;
+    private float originalMoveSpeed; // 원래 속도를 기억할 변수
 
     [Header("Look")]
     [SerializeField] private float minXLook; // 카메라 최소 각도
@@ -39,11 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         // 마우스 커서 숨기기
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    void Update()
-    {
-
+        // 기본 이동속도 기억하기
+        originalMoveSpeed = moveSpeed;
     }
 
     // 물리 계산이 Update보다 더 자주 계산된다.
@@ -173,5 +171,16 @@ public class PlayerController : MonoBehaviour
     public void SetCanLook(bool value)
     {
         canLook = value;
+    }
+
+    public void ApplySpeedBuff(float addSpeed)
+    {
+        // 이동 속도를 변경한다.
+        moveSpeed = originalMoveSpeed + addSpeed;
+    }
+
+    public void RemoveSpeedBuff()
+    {
+        moveSpeed = originalMoveSpeed;
     }
 }

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 
@@ -23,6 +21,9 @@ public class Inventory : MonoBehaviour
 {
     // 인벤토리나 선택 아이템이 변경될 때 UI에 알릴 델리게이트
     public event Action OnInventoryChanged;
+    // 버프 아이템 사용시 이벤트 델리게이트
+    public event Action<ItemData> OnUsedConsumeItem;
+
     // 인벤토리의 모든 슬롯을 담을 리스트
     public List<InventorySlot> slots = new List<InventorySlot>();
     // 보통 최대 개수를 정해놓고 잠궈둔 다음 해금하는 방식을 많이 사용한다고 알고 있다
@@ -82,6 +83,9 @@ public class Inventory : MonoBehaviour
     public void UseSelectedItem()
     {
         if (selectedSlot == null || selectedSlot.item.type != ItemType.Consumable) return;
+
+        // 버프 아이템 효과가 있다면 발동 (델리게이트를 더 일찍 깨우쳤다면 좋았겠습니다.)
+        OnUsedConsumeItem?.Invoke(selectedSlot.item);
 
         foreach (var consumable in selectedSlot.item.consumables)
         {
