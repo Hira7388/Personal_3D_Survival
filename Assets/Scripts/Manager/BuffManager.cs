@@ -28,27 +28,6 @@ public class BuffManager : Singleton<BuffManager>
         // 아직 좀 더 나은 해법을 모르겠습니다.
     }
 
-    private void Update()
-    {
-        for (int i = activeBuffs.Count - 1; i >= 0; i--)
-        {
-            ActiveBuff buff = activeBuffs[i];
-
-            // 남은 시간을 줄여줍니다.
-            buff.RemainingTime -= Time.deltaTime;
-
-            // 남은 시간이 다 되면
-            if (buff.RemainingTime <= 0)
-            {
-                // 버프 효과를 제거하고
-                RemoveBuffEffect(buff.Data);
-                // 리스트에서 삭제합니다.
-                activeBuffs.RemoveAt(i);
-                OnBuffsChanged?.Invoke(activeBuffs);
-            }
-        }
-    }
-
     private void OnDisable()
     {
         inventory.OnUsedConsumeItem -= OnItemUsed;
@@ -66,44 +45,46 @@ public class BuffManager : Singleton<BuffManager>
         }
     }
 
-    public void AddBuff(BuffData buff)
+    public void AddBuff(BuffData buffData)
     {
-        ActiveBuff existingBuff = activeBuffs.FirstOrDefault(b => b.Data.type == buff.type);
+        ActiveBuff existingBuff = activeBuffs.FirstOrDefault(b => b.Data.type == buffData.type);
 
         if (existingBuff != null)
         {
-            // 이미 있다면, 남은 시간을 새로 들어온 버프의 지속시간으로 초기화(갱신)합니다.
-            existingBuff.RemainingTime = buff.duration;
+            // 이미 같은 타입의 버프가 있다면, 코루틴을 새로 시작할 필요 없이
+            // 기존 버프의 남은 시간만 초기화(갱신)해줍니다.
+            existingBuff.RemainingTime = buffData.duration;
         }
         else
         {
-            // 없다면, 새로운 ActiveBuff를 생성해서 리스트에 추가하고 효과를 적용합니다.
-            ActiveBuff newBuff = new ActiveBuff(buff);
-            activeBuffs.Add(newBuff);
-            ApplyBuffEffect(newBuff.Data);
+            // 새로운 버프라면, ActiveBuff 객체를 만들고 타이머 코루틴을 시작합니다.
+            ActiveBuff newBuff = new ActiveBuff(buffData);
+            StartCoroutine(BuffTimerCoroutine(newBuff));
         }
-
-        OnBuffsChanged?.Invoke(activeBuffs);
     }
 
-    // 버프 UI 표시를 위해 제거
-    //IEnumerator BuffProcess(BuffData buff)
-    //{
-    //    // activeBuffs에 추가
-    //    activeBuffs.Add(buff);
-    //    // 버프 효과 발동
-    //    ApplyBuffEffect(buff);
-    //    OnChangedBuff?.Invoke(activeBuffs); // 버프 목록이 변경되었다고 신호
+    private IEnumerator BuffTimerCoroutine(ActiveBuff buff)
+    {
+        // 1. 리스트에 추가하고, 효과를 적용한 뒤 UI에 방송합니다.
+        activeBuffs.Add(buff);
+        ApplyBuffEffect(buff.Data);
+        OnBuffsChanged?.Invoke(activeBuffs);
 
-    //    yield return new WaitForSeconds(buff.duration); // 지속 시간동안 대기
+        // 2. 남은 시간이 0보다 클 동안 매 프레임 루프를 돕니다.
+        while (buff.RemainingTime > 0)
+        {
+            buff.RemainingTime -= Time.deltaTime;
+            yield return null; // 다음 프레임까지 대기
+        }
 
-        
-    //    // activeBuffs에 삭제
-    //    activeBuffs.Remove(buff);
-    //    // 버프 효과 종료
-    //    RemoveBuffEffect(buff);
-    //    OnChangedBuff?.Invoke(activeBuffs); // 버프 목록이 변경되었다고 신호
-    //}
+        // 3. 루프가 끝나면(시간이 다 되면), 버프를 제거합니다.
+        // 리스트에서 먼저 제거해야 UI 갱신 시 버프가 남아있는 현상을 막을 수 있습니다.
+        activeBuffs.Remove(buff);
+        RemoveBuffEffect(buff.Data);
+        OnBuffsChanged?.Invoke(activeBuffs);
+
+        Debug.Log(buff.Data.type + " 버프가 코루틴에 의해 종료되었습니다.");
+    }
 
     private void ApplyBuffEffect(BuffData buff)
     {
